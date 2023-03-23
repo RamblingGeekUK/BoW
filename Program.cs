@@ -8,9 +8,19 @@ namespace BankOfWayneBot
     {
         static async Task Main(string[] args)
         {
+
+            string value;
+            value = Environment.GetEnvironmentVariable("DiscordBow_TOKEN");
+
+            if (value == null)
+            {
+                Console.WriteLine("Token Not Found");
+                Environment.Exit(0);
+            };
+
             var discord = new DiscordClient(new DiscordConfiguration()
             {
-                Token = Environment.GetEnvironmentVariable("DiscordBow_Token"),
+                Token = value,
                 TokenType = TokenType.Bot,
                 Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents
             });
