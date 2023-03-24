@@ -1,4 +1,5 @@
 ﻿using DSharpPlus;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Net.Http.Headers;
 
@@ -9,57 +10,70 @@ namespace BankOfWayneBot
         static async Task Main(string[] args)
         {
 
-            string value;
-            value = Environment.GetEnvironmentVariable("DiscordBow_TOKEN");
+            string token;
 
-            if (value == null)
+            token = Environment.GetEnvironmentVariable("DiscordBow_TOKEN");
+
+            try
             {
-                Console.WriteLine("Token Not Found");
-                Environment.Exit(0);
-            };
-
-            var discord = new DiscordClient(new DiscordConfiguration()
-            {
-                Token = value,
-                TokenType = TokenType.Bot,
-                Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents
-            });
-
-            List<string> watchPhrase = new List<string>();
-            List<string> response = new List<string>();
-
-            foreach (string line in System.IO.File.ReadLines(@"watchPhrases.txt"))
-            {
-                watchPhrase.Add(line);
-            }
-
-            foreach (string line in System.IO.File.ReadLines(@"responses.txt"))
-            {
-                response.Add(line);
-            }
-
-            var random = new Random();
-
-            discord.MessageCreated += async (s, e) =>
-            {
-                int index = random.Next(response.Count);
-                foreach (var user in e.MentionedUsers)
+                var discord = new DiscordClient(new DiscordConfiguration()
                 {
-                    if (user.Username == "ramblinggeekuk" && !user.IsBot)
+                    Token = token,
+                    TokenType = TokenType.Bot,
+                    Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents
+                });
+
+
+
+                List<string> watchPhrase = new List<string>();
+                List<string> response = new List<string>();
+
+                foreach (string line in System.IO.File.ReadLines(@"watchPhrases.txt"))
+                {
+                    watchPhrase.Add(line);
+                }
+
+                foreach (string line in System.IO.File.ReadLines(@"responses.txt"))
+                {
+                    response.Add(line);
+                }
+
+                var random = new Random();
+
+                discord.MessageCreated += async (s, e) =>
+                {
+                    int index = random.Next(response.Count);
+                    foreach (var user in e.MentionedUsers)
                     {
-                        foreach (var item in watchPhrase)
+                        if (user.Username == "ramblinggeekuk" && !user.IsBot)
                         {
-                            if (e.Message.Content.ToLower().Contains(item))
-                                await e.Message.RespondAsync(response[index]);
+                            foreach (var item in watchPhrase)
+                            {
+                                if (e.Message.Content.Contains(item))
+                                {
+                                    if (e.Message.Content.ToLower().Contains(item))
+                                        await e.Message.RespondAsync(response[index]);
+
+                                    //_logger.LogInformation($@"reponded with {response[index]} which was triggered by {item} by the user {e.Message.Author.Username}");
+                                    break;
+                                }
+                            }
                         }
                     }
-                }
-            };
 
-            await discord.ConnectAsync();
-            await Task.Delay(-1);
+                };
+
+                await discord.ConnectAsync();
+                await Task.Delay(-1);
+            }
+            catch (Exception)
+            {
+
+                Console.WriteLine("ERROR : Ensure the enviorment variable is set DiscordBow_TOKEN");
+                Environment.Exit(1);
+            }
+
+
         }
-
-       
     }
 }
