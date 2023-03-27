@@ -20,7 +20,7 @@ To set on Linux :
 export DiscordBow_TOKEN=<key>
 ```
 
-To Set on Windows : 
+To Set on Windows (via PowerShell): 
 
 ```
 $env:DiscordBow = '<key>'
