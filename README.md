@@ -6,6 +6,26 @@ There are two text files, watchPhrases.txt and responses.txt. The watchPhrases f
 
 I have to mentioned and so does the wathcPhrase for the bot to reply.
 
+# Discord Token
+
+The app will look for an Enviroment varible named 
+
+```
+DiscordBow_TOKEN
+```
+
+To set on Linux : 
+
+```
+export DiscordBow_TOKEN=<key>
+```
+
+To Set on Windows : 
+
+```
+$env:DiscordBow = '<key>'
+```
+
 # Running on a Pi
 
 Install .dotnet 
