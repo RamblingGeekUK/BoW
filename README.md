@@ -10,20 +10,30 @@ I have to mentioned and so does the wathcPhrase for the bot to reply.
 
 Install .dotnet 
 
-```curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel STS```
+```
+curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel STS
+```
 
-```echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+```
+echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
 echo 'export PATH=$PATH:$HOME/.dotnet' >> ~/.bashrc
-source ~/.bashrc```
+source ~/.bashrc
+```
 
 For 32bit (Raspbbery OS)
 
-```dotnet publish --runtime linux-arm --self-contained```
+```
+dotnet publish --runtime linux-arm --self-contained
+```
 
 For 64Bit (Raspberry OS)
 
-```dotnet publish --runtime linux-arm64 --self-contained```
+```
+dotnet publish --runtime linux-arm64 --self-contained
+```
 
 Clone Repo
 
-```https://github.com/RamblingGeekUK/BoW.git```
+```
+https://github.com/RamblingGeekUK/BoW.git
+```
