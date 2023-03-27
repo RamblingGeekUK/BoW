@@ -5,3 +5,25 @@ On the discord server people will post things to buy, etc.. and I like my gadget
 There are two text files, watchPhrases.txt and responses.txt. The watchPhrases file containes all the words that the bot will respond to. The responses.txt is all the possiable responses.
 
 I have to mentioned and so does the wathcPhrase for the bot to reply.
+
+# Running on a Pi
+
+Install .dotnet 
+
+```curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel STS```
+
+```echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+echo 'export PATH=$PATH:$HOME/.dotnet' >> ~/.bashrc
+source ~/.bashrc```
+
+For 32bit (Raspbbery OS)
+
+```dotnet publish --runtime linux-arm --self-contained```
+
+For 64Bit (Raspberry OS)
+
+```dotnet publish --runtime linux-arm64 --self-contained```
+
+Clone Repo
+
+```https://github.com/RamblingGeekUK/BoW.git```
