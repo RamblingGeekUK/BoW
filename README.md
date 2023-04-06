@@ -42,7 +42,7 @@ echo 'export PATH=$PATH:$HOME/.dotnet' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-For 32bit (Raspbbery OS)
+For 32bit (Raspberry OS)
 
 ```
 dotnet publish --runtime linux-arm --self-contained
