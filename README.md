@@ -1,3 +1,5 @@
+[![.NET Worker](https://github.com/RamblingGeekUK/BoW/actions/workflows/dotnet-worker.yml/badge.svg)](https://github.com/RamblingGeekUK/BoW/actions/workflows/dotnet-worker.yml)
+
 # BankOfWayne Bot - BOW
 
 On the discord server people will post things to buy, etc.. and I like my gadgets, so I started replying with Bank Manager Of Wayne Says not allowed, etc, so I created a bot to automatically reply for me. 
