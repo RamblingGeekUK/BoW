@@ -1,4 +1,4 @@
-[![.NET Worker](https://github.com/RamblingGeekUK/BoW/actions/workflows/dotnet-worker.yml/badge.svg)](https://github.com/RamblingGeekUK/BoW/actions/workflows/dotnet-worker.yml)
+[![.NET Worker](https://github.com/RamblingGeekUK/BoW/actions/workflows/dotnet-worker.yml/badge.svg?branch=main)](https://github.com/RamblingGeekUK/BoW/actions/workflows/dotnet-worker.yml)
 
 # BankOfWayne Bot - BOW
 
