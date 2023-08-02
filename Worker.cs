@@ -21,8 +21,8 @@ namespace BoW
 
                 string token;
 
-                token = Environment.GetEnvironmentVariable("DiscordBow_TOKEN");
-
+                token = Environment.GetEnvironmentVariable("DiscordBow_TOKEN", EnvironmentVariableTarget.User);
+                
                 if (string.IsNullOrEmpty(token))
                 {
                     Log.Error("Discord Bot Token Not acquired");
@@ -80,7 +80,7 @@ namespace BoW
                         int index = random.Next(response.Count);
                         foreach (var user in e.MentionedUsers)
                         {
-                            if (user.Username == "ramblinggeekuk" && !user.IsBot)
+                            if (user.Username == "ramblinggeek" && !user.IsBot)
                             {
                                 foreach (var phrase in phrase)
                                 {
@@ -104,7 +104,7 @@ namespace BoW
                 catch (Exception)
                 {
 
-                    Log.Error("ERROR Something went really wrong to end up here.");
+                    Log.Fatal("ERROR Something went really wrong to end up here.");
                     Environment.Exit(1);
                 }
 
