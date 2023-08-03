@@ -21,7 +21,7 @@ namespace BoW
 
                 string token;
 
-                token = Environment.GetEnvironmentVariable("DiscordBow_TOKEN", EnvironmentVariableTarget.User);
+                token = Environment.GetEnvironmentVariable("DiscordBow_TOKEN");
                 
                 if (string.IsNullOrEmpty(token))
                 {
