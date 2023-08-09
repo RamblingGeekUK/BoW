@@ -1,6 +1,7 @@
 using DSharpPlus;
 using System;
 using Serilog;
+using System.Linq;
 
 namespace BoW
 {
@@ -19,10 +20,16 @@ namespace BoW
             {
                 Log.Information("Worker running at: {time}", DateTimeOffset.Now);
 
-                string token;
+                var token = Environment.GetEnvironmentVariable("DiscordBow_TOKEN");
+                var url = Environment.GetEnvironmentVariable("SB_BoW_URL");
+                var key = Environment.GetEnvironmentVariable("SB_BoW_API_Key");
+                var options = new Supabase.SupabaseOptions
+                {
+                    AutoConnectRealtime = true
+                };
 
-                token = Environment.GetEnvironmentVariable("DiscordBow_TOKEN");
-                
+               
+
                 if (string.IsNullOrEmpty(token))
                 {
                     Log.Error("Discord Bot Token Not acquired");
@@ -43,53 +50,35 @@ namespace BoW
                         TokenType = TokenType.Bot,
                         LoggerFactory = logFactory,
                         Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents
-                    }); ;
+                    });
 
-                    List<string> phrase = new List<string>();
-                    List<string> response = new List<string>();
+                    var supabase = new Supabase.Client(url, key, options);
+                    await supabase.InitializeAsync();
 
-                    string current_path = Path.GetDirectoryName(Environment.ProcessPath);
-                    string phrases = Path.Combine(current_path, "phrases.txt");
-                    string responses = Path.Combine(current_path, "responses.txt");
+                    var Phrases = await supabase.From<Phrases>().Get();
+                    var phrases = Phrases.Models;
 
-
-                    try
-                    {
-                        foreach (string line in File.ReadLines(phrases))
-                        {
-                            phrase.Add(line);
-                        }
-
-                        foreach (string line in File.ReadLines(responses))
-                        {
-                            response.Add(line);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        Log.Error("Error: One ore more data file is missing.");
-                        Log.Error($"{phrases}");
-                        Log.Error($"{responses}");
-                    }
+                    var Responses = await supabase.From<Responses>().Get();
+                    var responses = Responses.Models;
 
                     Log.Information("Phrase and reponse data acquired");
                     var random = new Random();
 
                     discord.MessageCreated += async (s, e) =>
                     {
-                        int index = random.Next(response.Count);
+                        int index = random.Next(responses.Count);
                         foreach (var user in e.MentionedUsers)
                         {
                             if (user.Username == "ramblinggeek" && !user.IsBot)
                             {
-                                foreach (var phrase in phrase)
+                                foreach (var phrase in phrases)
                                 {
-                                    if (e.Message.Content.Contains(phrase))
+                                    if (e.Message.Content.Contains(phrase.phrase))
                                     {
-                                        if (e.Message.Content.ToLower().Contains(phrase))
-                                            await e.Message.RespondAsync(response[index]);
+                                        if (e.Message.Content.ToLower().Contains(phrase.phrase))
+                                            await e.Message.RespondAsync(responses[index].response);
 
-                                        Log.Information($@"responded with '{response[index]}' triggered by the word/phrase '{phrase}' by the user '{e.Message.Author.Username}'");
+                                        Log.Information($@"responded with {responses[index].response}, Triggered by the word/phrase '{phrase.phrase}' by the user '{e.Message.Author.Username}'");
                                         break;
                                     }
                                 }
@@ -101,10 +90,10 @@ namespace BoW
                     await discord.ConnectAsync();
                     await Task.Delay(-1);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
 
-                    Log.Fatal("ERROR Something went really wrong to end up here.");
+                    Log.Fatal($"ERROR {e}");
                     Environment.Exit(1);
                 }
 

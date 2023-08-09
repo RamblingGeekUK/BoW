@@ -1,4 +1,5 @@
-﻿money
+﻿phrase
+money
 cheap
 get one of these
 dosh
