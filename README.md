@@ -2,30 +2,36 @@
 
 # BankOfWayne Bot - BOW
 
-On the discord server people will post things to buy, etc.. and I like my gadgets, so I started replying with Bank Manager Of Wayne Says not allowed, etc, so I created a bot to automatically reply for me. 
+On the discord server people will post things to buy, etc.. and I like my gadgets and for fun I started replying with Bank Manager Of Wayne Says this purchase is not allowed, etc, this BOT replies automatically for me. 
 
-There are two text files, phrases.txt and responses.txt. The phrases file containes all the words that the bot will respond to. The responses is all the possiable responses, one is selected at random. 
+It used to use text files to store the the words that would trigger a response, eg Buy, and a text file for the the reponse. I have swapped out the text files for a Supabase. 
 
-I have to be mentioned and so does the watchPhrase for the bot to reply.
+For it to fire, I have to be mentioned and so does the trigger phrase for the bot to reply.
 
 # Discord Token
 
-The app will look for an Enviroment varible named 
+The app will look for an Enviroment varibles named 
 
 ```
-DiscordBow_TOKEN
+DiscordBow_TOKEN  // erm... discord API/BOT Token
+SB_BoW_URL		  // Supabase DB URL
+SB_BoW_API_Key	  // Supabase API 
 ```
 
 To set on Linux : 
 
 ```
 export DiscordBow_TOKEN=<key>
+SB_BoW_URL=<url>
+SB_BoW_API_Key=<key>
 ```
 
 To Set on Windows (via PowerShell): 
 
 ```
 $env:DiscordBow = '<key>'
+$env:SB_BoW_URL = '<url>'
+$env:SB_BoW_API_Key = '<key>'
 ```
 
 # Running on a Pi

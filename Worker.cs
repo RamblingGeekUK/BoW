@@ -2,6 +2,7 @@ using DSharpPlus;
 using System;
 using Serilog;
 using System.Linq;
+using System.Reflection;
 
 namespace BoW
 {
@@ -18,6 +19,7 @@ namespace BoW
         {
             while (!stoppingToken.IsCancellationRequested)
             {
+                Log.Information(@$"BoW Worker Version {Assembly.GetExecutingAssembly().GetName().Version} - 15/08/2023");
                 Log.Information("Worker running at: {time}", DateTimeOffset.Now);
 
                 var token = Environment.GetEnvironmentVariable("DiscordBow_TOKEN");
@@ -30,20 +32,19 @@ namespace BoW
 
                
 
-                if (string.IsNullOrEmpty(token))
+                if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(url) || string.IsNullOrEmpty(key))
                 {
-                    Log.Error("Discord Bot Token Not acquired");
+                    Log.Error($@"One or more of the tokens is missing or invaild.");
                 }
                 else
                 {
-                    Log.Information("Acquired Discord Bot Token");
+                    Log.Information("Tokens successfully acquired");
                 }
 
                 try
                 {
 
                     var logFactory = new LoggerFactory().AddSerilog();
-
                     var discord = new DiscordClient(new DiscordConfiguration()
                     {
                         Token = token,
@@ -61,6 +62,8 @@ namespace BoW
                     var Responses = await supabase.From<Responses>().Get();
                     var responses = Responses.Models;
 
+                    var Username = System.Configuration.ConfigurationManager.AppSettings["username"];
+
                     Log.Information("Phrase and reponse data acquired");
                     var random = new Random();
 
@@ -69,7 +72,7 @@ namespace BoW
                         int index = random.Next(responses.Count);
                         foreach (var user in e.MentionedUsers)
                         {
-                            if (user.Username == "ramblinggeek" && !user.IsBot)
+                            if (user.Username == Username && !user.IsBot)
                             {
                                 foreach (var phrase in phrases)
                                 {
@@ -78,7 +81,7 @@ namespace BoW
                                         if (e.Message.Content.ToLower().Contains(phrase.phrase))
                                             await e.Message.RespondAsync(responses[index].response);
 
-                                        Log.Information($@"responded with {responses[index].response}, Triggered by the word/phrase '{phrase.phrase}' by the user '{e.Message.Author.Username}'");
+                                        Log.Information($@"responded with ""{responses[index].response}"", triggered by the word/phrase '{phrase.phrase}' by the user '{e.Message.Author.Username}'");
                                         break;
                                     }
                                 }
